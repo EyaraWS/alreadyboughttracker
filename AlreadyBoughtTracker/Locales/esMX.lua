@@ -19,6 +19,9 @@ L.DIM_TOOLTIP = "Atenuar los objetos ya coleccionados"
 L.DIM_ALPHA = "Opacidad de atenuación"
 L.DIM_ALPHA_TOOLTIP = "Opacidad para objetos conocidos en modo Atenuar"
 
+L.UPDATE_NOTIFY = "Notificaciones de actualización"
+L.UPDATE_NOTIFY_TOOLTIP = "Mostrar mensajes en el chat cuando el addon se actualiza o hay una versión más reciente disponible."
+
 -- Opciones de seguimiento
 L.MOUNTS = "Monturas"
 L.MOUNTS_TOOLTIP = "Seguir objetos de montura."
@@ -42,3 +45,10 @@ L.TOKEN_PET = "Mascota"
 L.TOKEN_BATTLE_PET = "Mascota de batalla"
 L.TOKEN_SUMMON = "Invocar"
 L.TOKEN_USE = "Usar:"
+
+-- Aviso de actualización
+L.UPDATED_TO = "Actualizado a %s."
+L.UPDATE_AVAILABLE = "Hay una nueva versión disponible: %s (tienes %s)."
+L.UPDATE_CHECK_LINK = "Descárgala en: %s"
+L.REPO_URL = "https://github.com/EyaraWS/alreadyboughttracker/releases"
+L.CURSE_URL = "https://www.curseforge.com/wow/addons/already-bought-tracker"

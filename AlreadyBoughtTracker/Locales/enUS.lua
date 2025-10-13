@@ -18,6 +18,9 @@ L.DIM_TOOLTIP = "Dim collected items"
 L.DIM_ALPHA = "Dim alpha"
 L.DIM_ALPHA_TOOLTIP = "Opacity for known items when using Dim mode"
 
+L.UPDATE_NOTIFY = "Update notifications"
+L.UPDATE_NOTIFY_TOOLTIP = "Show chat messages when the addon updates or when a newer version is available."
+
 -- Tracking options
 L.MOUNTS = "Mounts"
 L.MOUNTS_TOOLTIP = "Track mount items."
@@ -41,3 +44,10 @@ L.TOKEN_PET = "Pet"
 L.TOKEN_BATTLE_PET = "Battle Pet"
 L.TOKEN_SUMMON = "Summon"
 L.TOKEN_USE = "Use:"
+
+-- Update notifier
+L.UPDATED_TO = "Updated to %s."
+L.UPDATE_AVAILABLE = "A newer version is available: %s (you have %s)."
+L.UPDATE_CHECK_LINK = "Get it at: %s"
+L.REPO_URL = "https://github.com/EyaraWS/alreadyboughttracker/releases"
+L.CURSE_URL = "https://www.curseforge.com/wow/addons/already-bought-tracker"

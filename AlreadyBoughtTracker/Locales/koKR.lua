@@ -19,6 +19,9 @@ L.DIM_TOOLTIP = "이미 수집한 아이템을 어둡게"
 L.DIM_ALPHA = "어둡기 투명도"
 L.DIM_ALPHA_TOOLTIP = "어둡게 모드에서 이미 아는 아이템의 투명도"
 
+L.UPDATE_NOTIFY = "업데이트 알림"
+L.UPDATE_NOTIFY_TOOLTIP = "애드온 업데이트 또는 새 버전이 있을 때 채팅 메시지를 표시합니다."
+
 -- 추적 옵션
 L.MOUNTS = "탈것"
 L.MOUNTS_TOOLTIP = "탈것 아이템 추적."
@@ -42,3 +45,10 @@ L.TOKEN_PET = "애완동물"
 L.TOKEN_BATTLE_PET = "전투 애완동물"
 L.TOKEN_SUMMON = "소환"
 L.TOKEN_USE = "사용:"
+
+-- 업데이트 알림
+L.UPDATED_TO = "버전 %s(으)로 업데이트되었습니다."
+L.UPDATE_AVAILABLE = "새 버전이 있습니다: %s (현재 %s)."
+L.UPDATE_CHECK_LINK = "다운로드: %s"
+L.REPO_URL = "https://github.com/EyaraWS/alreadyboughttracker/releases"
+L.CURSE_URL = "https://www.curseforge.com/wow/addons/already-bought-tracker"

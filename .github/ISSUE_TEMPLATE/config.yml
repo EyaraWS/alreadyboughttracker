@@ -1,0 +1,8 @@
+blank_issues_enabled: false
+contact_links:
+  - name: Read the addon README
+    url: https://github.com/EyaraWS/alreadyboughttracker#readme
+    about: Check usage notes and known limitations before filing an issue.
+  - name: Latest releases
+    url: https://github.com/EyaraWS/alreadyboughttracker/releases
+    about: Verify if your issue is already fixed in a newer version.

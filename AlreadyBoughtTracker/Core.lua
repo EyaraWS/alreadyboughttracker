@@ -10,11 +10,13 @@ ABT:RegisterEvent("MERCHANT_SHOW")
 ABT:RegisterEvent("MERCHANT_UPDATE")
 ABT:RegisterEvent("PLAYER_LOGIN")
 ABT:RegisterEvent("PLAYER_ENTERING_WORLD")
+ABT:RegisterEvent("CHAT_MSG_ADDON")
 
 local defaults = {
   enableMark = true,
   enableDim = false,
   dimAlpha = 0.35,
+  enableUpdateNotify = true,
 
   enableMounts = true,
   enablePets = true,
@@ -40,20 +42,107 @@ end
 
 local L = _G[ADDON_NAME.."Locale"] or setmetatable({}, {__index=function(t,k) return k end})
 
+local function GetVersion()
+  local v
+  if C_AddOns and C_AddOns.GetAddOnMetadata then
+    v = C_AddOns.GetAddOnMetadata(ADDON_NAME, "Version")
+  elseif GetAddOnMetadata then
+    v = GetAddOnMetadata(ADDON_NAME, "Version")
+  end
+  return v or "v0.0.0"
+end
+
+local function ParseVersion(v)
+  if type(v) ~= "string" then return 0,0,0 end
+  local a,b,c = v:match("v?(%d+)%.(%d+)%.(%d+)")
+  return tonumber(a) or 0, tonumber(b) or 0, tonumber(c) or 0
+end
+
+local function IsVersionGreater(a, b)
+  local a1,a2,a3 = ParseVersion(a)
+  local b1,b2,b3 = ParseVersion(b)
+  if a1 ~= b1 then return a1 > b1 end
+  if a2 ~= b2 then return a2 > b2 end
+  return a3 > b3
+end
+
+ABT.version = GetVersion()
+
+local COLOR_GREEN = "|cff00ff00"
+local COLOR_YELLOW = "|cffffff00"
+local COLOR_RESET = "|r"
+
+local function PrintPrefix()
+  return COLOR_GREEN .. "ABT" .. COLOR_RESET .. ": "
+end
+
+local function NotifyUpdatedIfNewInstall()
+  if not ABT_Saved.enableUpdateNotify then return end
+  if not ABT_Saved then return end
+  local seen = ABT_Saved.seenVersion
+  if seen ~= ABT.version then
+    local fmt = L.UPDATED_TO
+    local ver = COLOR_YELLOW .. (ABT.version or "") .. COLOR_RESET
+    print(PrintPrefix() .. string.format(fmt, ver))
+    local repo = rawget(L, "REPO_URL")
+    local curse = rawget(L, "CURSE_URL")
+    local linkFmt = L.UPDATE_CHECK_LINK
+    if repo then print(PrintPrefix() .. string.format(linkFmt, COLOR_YELLOW .. repo .. COLOR_RESET)) end
+    if curse then print(PrintPrefix() .. string.format(linkFmt, COLOR_YELLOW .. curse .. COLOR_RESET)) end
+    ABT_Saved.seenVersion = ABT.version
+  end
+end
+
+local function ABT_SendVersionPing()
+  if not ABT_Saved.enableUpdateNotify then return end
+  if not C_ChatInfo or not C_ChatInfo.SendAddonMessage then return end
+  if C_ChatInfo.RegisterAddonMessagePrefix then pcall(C_ChatInfo.RegisterAddonMessagePrefix, "ABTVER") end
+  local msg = "VER " .. (ABT.version or "v0.0.0")
+  local function send(chan)
+    pcall(C_ChatInfo.SendAddonMessage, "ABTVER", msg, chan)
+  end
+  if IsInGuild and IsInGuild() then send("GUILD") end
+  if IsInGroup and IsInGroup(LE_PARTY_CATEGORY_INSTANCE) then send("INSTANCE_CHAT") end
+  if IsInRaid and IsInRaid() then
+    send("RAID")
+  elseif IsInGroup and IsInGroup() then
+    send("PARTY")
+  end
+end
+
+local function ABT_OnAddonMessage(prefix, message, channel, sender)
+  if not ABT_Saved.enableUpdateNotify then return end
+  if prefix ~= "ABTVER" or type(message) ~= "string" then return end
+  local me = UnitName and UnitName("player") or nil
+  if sender and me then
+    if sender == me then return end
+    local sep = sender:find("-", 1, true)
+    if sep and sender:sub(1, sep - 1) == me then return end
+  end
+  local ver = message:match("^VER%s+(.+)$")
+  if not ver then return end
+  if IsVersionGreater(ver, ABT.version) then
+    if ABT_Saved.notifiedOutdatedFor ~= ver then
+      local fmt = L.UPDATE_AVAILABLE
+      local verNew = COLOR_YELLOW .. ver .. COLOR_RESET
+      local verHave = COLOR_YELLOW .. (ABT.version or "") .. COLOR_RESET
+      print(PrintPrefix() .. string.format(fmt, verNew, verHave))
+      local repo = rawget(L, "REPO_URL")
+      local curse = rawget(L, "CURSE_URL")
+      local linkFmt = L.UPDATE_CHECK_LINK
+      if repo then print(PrintPrefix() .. string.format(linkFmt, COLOR_YELLOW .. repo .. COLOR_RESET)) end
+      if curse then print(PrintPrefix() .. string.format(linkFmt, COLOR_YELLOW .. curse .. COLOR_RESET)) end
+      ABT_Saved.notifiedOutdatedFor = ver
+    end
+  end
+end
+
 local function NormalizeSettings()
   if type(ABT_Saved) ~= "table" then ABT_Saved = {} end
   ABT_Saved = CopyDefaults(defaults, ABT_Saved)
-  -- Migrate legacy transmog-related settings to unified enableEquipment
-  if ABT_Saved.enableTransmogItems ~= nil or ABT_Saved.considerTransmog ~= nil then
-    local legacy = ABT_Saved.enableTransmogItems or ABT_Saved.considerTransmog
-    if legacy ~= nil then
-      ABT_Saved.enableEquipment = not not legacy
-    end
-    ABT_Saved.enableTransmogItems = nil
-    ABT_Saved.considerTransmog = nil
-  end
   ABT_Saved.enableMark = not not ABT_Saved.enableMark
   ABT_Saved.enableDim = not not ABT_Saved.enableDim
+  ABT_Saved.enableUpdateNotify = not not ABT_Saved.enableUpdateNotify
 
   ABT_Saved.enableMounts = not not ABT_Saved.enableMounts
   ABT_Saved.enablePets = not not ABT_Saved.enablePets
@@ -280,7 +369,6 @@ local function SetOverlay(button, state)
     overlay:Hide()
     return
   end
-
   overlay:Show()
   if state == "known" then
     overlay.icon:SetTexture("Interface\\RaidFrame\\ReadyCheck-Ready")
@@ -289,7 +377,6 @@ local function SetOverlay(button, state)
     overlay.icon:SetTexture("Interface\\RaidFrame\\ReadyCheck-NotReady")
     overlay.icon:SetVertexColor(1, 0.25, 0.25, 1)
   end
-
 end
 
 local function RestoreButton(button)
@@ -358,15 +445,19 @@ local function UpdateMerchant()
 end
 
 ABT.settingsRegistered = ABT.settingsRegistered or false
-ABT:SetScript("OnEvent", function(self, event, arg1)
-  if event == "ADDON_LOADED" and arg1 == ADDON_NAME then
+ABT:SetScript("OnEvent", function(self, event, ...)
+  if event == "ADDON_LOADED" and select(1, ...) == ADDON_NAME then
     NormalizeSettings()
     if not ABT.settingsRegistered then ABT:RegisterSettings() end
+    NotifyUpdatedIfNewInstall()
     ABT:UnregisterEvent("ADDON_LOADED")
   elseif event == "PLAYER_LOGIN" or event == "PLAYER_ENTERING_WORLD" then
     if not ABT.settingsRegistered then ABT:RegisterSettings() end
+    C_Timer.After(5, ABT_SendVersionPing)
   elseif event == "MERCHANT_SHOW" or event == "MERCHANT_UPDATE" then
     C_Timer.After(0, UpdateMerchant)
+  elseif event == "CHAT_MSG_ADDON" then
+    ABT_OnAddonMessage(...)
   end
 end)
 
@@ -403,6 +494,14 @@ function ABT:RegisterSettings()
       function() return ABT_Saved.enableDim end,
       function(val) ABT_Saved.enableDim = not not val; UpdateMerchant() end)
     Settings.CreateCheckbox(displayCat, setting, L.DIM_TOOLTIP)
+  end
+
+  do
+    local variable = "abt_enable_update_notify"
+    local setting = Settings.RegisterProxySetting(displayCat, variable, Settings.VarType.Boolean, L.UPDATE_NOTIFY, defaults.enableUpdateNotify,
+      function() return ABT_Saved.enableUpdateNotify end,
+      function(val) ABT_Saved.enableUpdateNotify = not not val end)
+    Settings.CreateCheckbox(displayCat, setting, L.UPDATE_NOTIFY_TOOLTIP)
   end
 
   do
