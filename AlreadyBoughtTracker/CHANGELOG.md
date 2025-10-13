@@ -38,3 +38,10 @@
 - Completed full translation sweep for remaining locales: koKR, ptBR, ruRU, zhCN, zhTW
 - Ensured all non-enUS locale files use the new canonical key set and native-language strings
 - Minor tooltip wording polish across locales for clarity and consistency
+
+## v0.2.0
+- New: in-chat update notifier announces when the addon updates and when a newer version is available (localized, quiet by default)
+- New: Display toggle to disable update notifications entirely
+- Improvement: silent cross-player version discovery using addon messages (WhoTaunted-style)
+- Cleanup: removed legacy transmog settings migration from NormalizeSettings
+- Localization: added notifier labels across all locales and ensured URLs are localized keys

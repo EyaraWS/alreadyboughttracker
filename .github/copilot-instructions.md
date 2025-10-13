@@ -85,7 +85,7 @@ These guidelines capture how this repo is structured, what to change (and what n
 
 - Releasing a version
   - [ ] Update `AlreadyBoughtTracker.toc` version
-  - [ ] Add `## vX.Y.Z` to `AlreadyBoughtTracker/CHANGELOG.md`
+  - [ ] Add `## vX.Y.Z` to `AlreadyBoughtTracker/CHANGELOG.md` at the end of the file
   - [ ] Ensure changelog text matches what you want in the release notes
   - [ ] Tag `vX.Y.Z` and push (CI will publish release and asset)
 
