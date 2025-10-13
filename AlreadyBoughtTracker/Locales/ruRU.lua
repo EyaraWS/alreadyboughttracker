@@ -19,6 +19,9 @@ L.DIM_TOOLTIP = "Затемнять уже собранные предметы"
 L.DIM_ALPHA = "Степень затемнения"
 L.DIM_ALPHA_TOOLTIP = "Непрозрачность для известных предметов в режиме затемнения"
 
+L.UPDATE_NOTIFY = "Уведомления об обновлениях"
+L.UPDATE_NOTIFY_TOOLTIP = "Показывать сообщения в чате при обновлении аддона или появлении новой версии."
+
 -- Параметры отслеживания
 L.MOUNTS = "Маунты"
 L.MOUNTS_TOOLTIP = "Отслеживать предметы маунтов."
@@ -42,3 +45,10 @@ L.TOKEN_PET = "Питомец"
 L.TOKEN_BATTLE_PET = "Боевой питомец"
 L.TOKEN_SUMMON = "Призыв"
 L.TOKEN_USE = "Использование:"
+
+-- Уведомление об обновлении
+L.UPDATED_TO = "Обновлено до %s."
+L.UPDATE_AVAILABLE = "Доступна новая версия: %s (у вас %s)."
+L.UPDATE_CHECK_LINK = "Скачать: %s"
+L.REPO_URL = "https://github.com/EyaraWS/alreadyboughttracker/releases"
+L.CURSE_URL = "https://www.curseforge.com/wow/addons/already-bought-tracker"

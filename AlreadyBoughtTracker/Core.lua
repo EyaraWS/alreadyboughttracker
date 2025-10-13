@@ -16,6 +16,7 @@ local defaults = {
   enableMark = true,
   enableDim = false,
   dimAlpha = 0.35,
+  enableUpdateNotify = true,
 
   enableMounts = true,
   enablePets = true,
@@ -76,6 +77,7 @@ local function PrintPrefix()
 end
 
 local function NotifyUpdatedIfNewInstall()
+  if not ABT_Saved.enableUpdateNotify then return end
   if not ABT_Saved then return end
   local seen = ABT_Saved.seenVersion
   if seen ~= ABT.version then
@@ -92,6 +94,7 @@ local function NotifyUpdatedIfNewInstall()
 end
 
 local function ABT_SendVersionPing()
+  if not ABT_Saved.enableUpdateNotify then return end
   if not C_ChatInfo or not C_ChatInfo.SendAddonMessage then return end
   if C_ChatInfo.RegisterAddonMessagePrefix then pcall(C_ChatInfo.RegisterAddonMessagePrefix, "ABTVER") end
   local msg = "VER " .. (ABT.version or "v0.0.0")
@@ -108,6 +111,7 @@ local function ABT_SendVersionPing()
 end
 
 local function ABT_OnAddonMessage(prefix, message, channel, sender)
+  if not ABT_Saved.enableUpdateNotify then return end
   if prefix ~= "ABTVER" or type(message) ~= "string" then return end
   local me = UnitName and UnitName("player") or nil
   if sender and me and (sender == me or (me and sender:match("^"..me.."%-"))) then return end
@@ -495,6 +499,14 @@ function ABT:RegisterSettings()
       function() return ABT_Saved.enableDim end,
       function(val) ABT_Saved.enableDim = not not val; UpdateMerchant() end)
     Settings.CreateCheckbox(displayCat, setting, L.DIM_TOOLTIP)
+  end
+
+  do
+    local variable = "abt_enable_update_notify"
+    local setting = Settings.RegisterProxySetting(displayCat, variable, Settings.VarType.Boolean, L.UPDATE_NOTIFY, defaults.enableUpdateNotify,
+      function() return ABT_Saved.enableUpdateNotify end,
+      function(val) ABT_Saved.enableUpdateNotify = not not val end)
+    Settings.CreateCheckbox(displayCat, setting, L.UPDATE_NOTIFY_TOOLTIP)
   end
 
   do

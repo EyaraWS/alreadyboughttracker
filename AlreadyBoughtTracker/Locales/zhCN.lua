@@ -19,6 +19,9 @@ L.DIM_TOOLTIP = "将已收藏的物品变暗"
 L.DIM_ALPHA = "变暗透明度"
 L.DIM_ALPHA_TOOLTIP = "在变暗模式下已知物品的不透明度"
 
+L.UPDATE_NOTIFY = "更新通知"
+L.UPDATE_NOTIFY_TOOLTIP = "当插件更新或有新版本可用时在聊天中显示消息。"
+
 -- 跟踪选项
 L.MOUNTS = "坐骑"
 L.MOUNTS_TOOLTIP = "跟踪坐骑物品。"
@@ -42,3 +45,10 @@ L.TOKEN_PET = "宠物"
 L.TOKEN_BATTLE_PET = "战斗宠物"
 L.TOKEN_SUMMON = "召唤"
 L.TOKEN_USE = "使用："
+
+-- 更新通知
+L.UPDATED_TO = "已更新到 %s。"
+L.UPDATE_AVAILABLE = "有新版本可用：%s（当前为 %s）。"
+L.UPDATE_CHECK_LINK = "获取地址：%s"
+L.REPO_URL = "https://github.com/EyaraWS/alreadyboughttracker/releases"
+L.CURSE_URL = "https://www.curseforge.com/wow/addons/already-bought-tracker"
