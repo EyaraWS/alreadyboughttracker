@@ -114,7 +114,11 @@ local function ABT_OnAddonMessage(prefix, message, channel, sender)
   if not ABT_Saved.enableUpdateNotify then return end
   if prefix ~= "ABTVER" or type(message) ~= "string" then return end
   local me = UnitName and UnitName("player") or nil
-  if sender and me and (sender == me or (me and sender:match("^"..me.."%-"))) then return end
+  if sender and me then
+    if sender == me then return end
+    local sep = sender:find("-", 1, true)
+    if sep and sender:sub(1, sep - 1) == me then return end
+  end
   local ver = message:match("^VER%s+(.+)$")
   if not ver then return end
   if IsVersionGreater(ver, ABT.version) then
