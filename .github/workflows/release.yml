@@ -1,0 +1,68 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - "v*"
+
+permissions:
+  contents: write
+
+jobs:
+  build-and-release:
+    name: Package addon and attach to release
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Validate tag context
+        if: ${{ !startsWith(github.ref, 'refs/tags/') }}
+        run: |
+          echo "This workflow should run on tags only." >&2
+          exit 1
+
+      - name: Zip addon folder
+        run: |
+          ls -la
+          test -d AlreadyBoughtTracker
+          zip -r "AlreadyBoughtTracker-${GITHUB_REF_NAME}.zip" "AlreadyBoughtTracker"
+          ls -lh "AlreadyBoughtTracker-${GITHUB_REF_NAME}.zip"
+
+      - name: Extract release notes from CHANGELOG
+        id: changelog
+        run: |
+          TAG="${GITHUB_REF_NAME}"
+          FILE="AlreadyBoughtTracker/CHANGELOG.md"
+          if [ ! -f "$FILE" ]; then
+            echo "Changelog not found at $FILE" >&2
+            exit 1
+          fi
+          # Extract section starting at "## vX.Y.Z" (matching the tag) until the next "## v" or EOF
+          awk -v tag="$TAG" '
+            BEGIN{found=0}
+            $0 ~ "^## " tag "$" {found=1; print; next}
+            found && $0 ~ "^## v" {exit}
+            found {print}
+          ' "$FILE" > RELEASE_NOTES.md
+          if [ ! -s RELEASE_NOTES.md ]; then
+            echo "No matching section for $TAG in $FILE; generating fallback." >&2
+            {
+              echo "## ${TAG}"
+              echo
+              echo "Automated release for ${TAG}."
+            } > RELEASE_NOTES.md
+          fi
+          {
+            echo
+            echo "**Full Changelog**: https://github.com/${GITHUB_REPOSITORY}/commits/${TAG}"
+          } >> RELEASE_NOTES.md
+
+      - name: Upload release asset
+        uses: softprops/action-gh-release@v2
+        with:
+          files: |
+            AlreadyBoughtTracker-${{ github.ref_name }}.zip
+          body_path: RELEASE_NOTES.md
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
