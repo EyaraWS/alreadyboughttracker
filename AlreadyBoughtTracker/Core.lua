@@ -136,18 +136,9 @@ end
 local function NormalizeSettings()
   if type(ABT_Saved) ~= "table" then ABT_Saved = {} end
   ABT_Saved = CopyDefaults(defaults, ABT_Saved)
-  -- Migrate legacy transmog-related settings to unified enableEquipment
-  if ABT_Saved.enableTransmogItems ~= nil or ABT_Saved.considerTransmog ~= nil then
-    local legacy = ABT_Saved.enableTransmogItems or ABT_Saved.considerTransmog
-    if legacy ~= nil then
-      ABT_Saved.enableEquipment = not not legacy
-    end
-    ABT_Saved.enableTransmogItems = nil
-    ABT_Saved.considerTransmog = nil
-  end
-  -- End legacy migration
   ABT_Saved.enableMark = not not ABT_Saved.enableMark
   ABT_Saved.enableDim = not not ABT_Saved.enableDim
+  ABT_Saved.enableUpdateNotify = not not ABT_Saved.enableUpdateNotify
 
   ABT_Saved.enableMounts = not not ABT_Saved.enableMounts
   ABT_Saved.enablePets = not not ABT_Saved.enablePets
