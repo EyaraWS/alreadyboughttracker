@@ -453,6 +453,14 @@ local function UpdateMerchant()
   end
 end
 
+local function ABT_ScheduleUpdateBurst()
+  if not MerchantFrame or not MerchantFrame:IsShown() then return end
+  local delays = {0, 0.05, 0.1, 0.2, 0.35}
+  for _, d in ipairs(delays) do
+    C_Timer.After(d, UpdateMerchant)
+  end
+end
+
 ABT.settingsRegistered = ABT.settingsRegistered or false
 ABT:SetScript("OnEvent", function(self, event, ...)
   if event == "ADDON_LOADED" and select(1, ...) == ADDON_NAME then
@@ -464,7 +472,7 @@ ABT:SetScript("OnEvent", function(self, event, ...)
     if not ABT.settingsRegistered then ABT:RegisterSettings() end
     C_Timer.After(5, ABT_SendVersionPing)
   elseif event == "MERCHANT_SHOW" or event == "MERCHANT_UPDATE" then
-    C_Timer.After(0, UpdateMerchant)
+    ABT_ScheduleUpdateBurst()
   elseif event == "CHAT_MSG_ADDON" then
     ABT_OnAddonMessage(...)
   end
@@ -591,13 +599,13 @@ ABT.merchantHooksDone = false
 local function ABT_HookMerchantPaging()
   if ABT.merchantHooksDone then return end
   if MerchantNextPageButton and MerchantNextPageButton.HookScript then
-    MerchantNextPageButton:HookScript("OnClick", function() C_Timer.After(0.05, UpdateMerchant) end)
+    MerchantNextPageButton:HookScript("OnClick", function() ABT_ScheduleUpdateBurst() end)
   end
   if MerchantPrevPageButton and MerchantPrevPageButton.HookScript then
-    MerchantPrevPageButton:HookScript("OnClick", function() C_Timer.After(0.05, UpdateMerchant) end)
+    MerchantPrevPageButton:HookScript("OnClick", function() ABT_ScheduleUpdateBurst() end)
   end
   if type(MerchantFrame_Update) == "function" then
-    hooksecurefunc("MerchantFrame_Update", function() C_Timer.After(0, UpdateMerchant) end)
+    hooksecurefunc("MerchantFrame_Update", function() ABT_ScheduleUpdateBurst() end)
   end
   ABT.merchantHooksDone = true
 end
