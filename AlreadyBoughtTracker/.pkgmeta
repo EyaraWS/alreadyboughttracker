@@ -2,8 +2,6 @@ package-as: AlreadyBoughtTracker
 
 enable-nolib-creation: no
 
-externals:
-
 ignore:
   - .github
   - .gitignore
@@ -15,6 +13,3 @@ ignore:
   - .vscode
 
 manual-changelog: AlreadyBoughtTracker/CHANGELOG.md
-
-move-folders:
-  AlreadyBoughtTracker: .
