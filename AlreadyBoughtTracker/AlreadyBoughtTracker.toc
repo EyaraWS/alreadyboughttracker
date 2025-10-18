@@ -17,4 +17,6 @@ Locales/ruRU.lua
 Locales/ptBR.lua
 Locales/zhCN.lua
 Locales/zhTW.lua
+whitelist-items.lua
+blacklist-items.lua
 Core.lua
