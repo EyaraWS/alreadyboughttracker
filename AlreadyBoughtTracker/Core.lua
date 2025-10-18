@@ -325,17 +325,14 @@ end
 
 local function IsCollectibleCandidate(itemLink)
   if not itemLink then return false end
-  do
-    local id = GetItemID(itemLink)
-    if id then
-      local WL = _G[ADDON_NAME .. "Whitelist"]
-      local BL = _G[ADDON_NAME .. "Blacklist"]
-      if WL and WL[id] then return true end
-      if BL and BL[id] then return false end
-    end
+  local id = GetItemID(itemLink)
+  if id then
+    local WL = _G[ADDON_NAME .. "Whitelist"]
+    local BL = _G[ADDON_NAME .. "Blacklist"]
+    if WL and WL[id] then return true end
+    if BL and BL[id] then return false end
   end
   if ABT_Saved.enablePets and type(itemLink) == "string" and itemLink:find("^battlepet:") then return true end
-  local id = GetItemID(itemLink)
   if id then
     if ABT_Saved.enableMounts and C_MountJournal and C_MountJournal.GetMountFromItem and C_MountJournal.GetMountFromItem(id) then return true end
     if ABT_Saved.enableToys and C_ToyBox and C_ToyBox.IsToy and C_ToyBox.IsToy(id) then return true end
