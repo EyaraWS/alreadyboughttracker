@@ -49,3 +49,6 @@
 ## v0.3.0
 - New: maintainer-only whitelist/blacklist of itemIDs to force include/exclude specific items detected incorrectly
 - Fix: stabilize overlays on rapid merchant page switches via burst refresh scheduling
+
+## v0.3.1
+- Bump version to v0.3.1
