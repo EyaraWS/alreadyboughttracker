@@ -52,3 +52,6 @@
 
 ## v0.3.1
 - Bump version to v0.3.1
+
+## v0.3.2
+- Bump version to v0.3.2
