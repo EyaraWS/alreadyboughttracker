@@ -45,3 +45,7 @@
 - Improvement: silent cross-player version discovery using addon messages (WhoTaunted-style)
 - Cleanup: removed legacy transmog settings migration from NormalizeSettings
 - Localization: added notifier labels across all locales and ensured URLs are localized keys
+
+## v0.3.0
+- New: maintainer-only whitelist/blacklist of itemIDs to force include/exclude specific items detected incorrectly
+- Fix: stabilize overlays on rapid merchant page switches via burst refresh scheduling
