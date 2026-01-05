@@ -58,3 +58,7 @@
 
 ## v0.3.3
 - Bump version to v0.3.3
+
+## v0.3.4
+- Bump version to v0.3.4
+- Bump interface version to 110207
