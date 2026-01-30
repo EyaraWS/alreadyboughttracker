@@ -1,8 +1,8 @@
-## Interface: 110207
+## Interface: 120000
 ## Title: Already Bought Tracker
 ## Notes: Adds checkmarks or crosses to vendor items if already known/collected; can optionally dim them.
 ## Author: Eyara
-## Version: v0.3.4
+## Version: v0.3.5
 ## SavedVariables: ABT_Saved
 ## X-Curse-Project-ID: 1363230
 ## X-AddonProvider: github

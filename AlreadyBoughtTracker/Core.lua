@@ -452,10 +452,13 @@ end
 
 local function ABT_ScheduleUpdateBurst()
   if not MerchantFrame or not MerchantFrame:IsShown() then return end
-  local delays = {0, 0.05, 0.1, 0.2, 0.35}
+  if ABT.updateScheduled then return end
+  ABT.updateScheduled = true
+  local delays = {0, 0.15}
   for _, d in ipairs(delays) do
     C_Timer.After(d, UpdateMerchant)
   end
+  C_Timer.After(0.25, function() ABT.updateScheduled = false end)
 end
 
 ABT.settingsRegistered = ABT.settingsRegistered or false
