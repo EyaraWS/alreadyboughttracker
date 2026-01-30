@@ -62,3 +62,7 @@
 ## v0.3.4
 - Bump version to v0.3.4
 - Bump interface version to 110207
+
+## v0.3.5
+- Bump interface version to 120000
+- Fix: reduce merchant update burst frequency and add debounce to eliminate lag when buying/selling with other addons
